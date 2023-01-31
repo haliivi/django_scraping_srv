@@ -41,7 +41,7 @@ class City(BaseModel):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = translit(str(self.name))
+            self.slug = transliteration(str(self.name))
         super().save(*args, **kwargs)
 
 
@@ -66,7 +66,7 @@ class Language(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = translit(str(self.name))
+            self.slug = transliteration(str(self.name))
         super().save(*args, **kwargs)
 
 
