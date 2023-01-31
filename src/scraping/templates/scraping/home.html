@@ -9,12 +9,23 @@
                 <p>{{ obj.city }} | {{ obj.language }} | <small>{{ obj.timestamp|date:"d-m-y" }}</small></p>
             </div>
         </div>
+    {% empty %}
+    <div class="row">
+        <div class="col-md-4 mx-auto">
+            <h3 class="mx-auto" style="text-align: justify;">К сожалению по вашему запросу ничего не найдено!!!</h3>
+        </div>
+    </div>
     {% endfor %}
-    <form method="get" action="">
-        <label for="city">Город:</label><br />
-        <input id="city" name="city" type="text"><br />
-        <label for="language">Специальность:</label><br />
-        <input id="language" name="language" type="text"><br />
-        <input type="submit" value="Submit">
-    </form>
+    <div class="row">
+        <div class="col-md-4 mx-auto">
+            <form method="get" action="">
+                {{ form.as_p }}
+                <div class="container">
+                    <div class="col-md-12 text-center">
+                        <button type="submit" class="btn btn-primary">Найти</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 {% endblock content %}

@@ -45,7 +45,7 @@ class City(BaseModel):
         super().save(*args, **kwargs)
 
 
-class Language(models.Model):
+class Language(BaseModel):
     name = models.CharField(
         max_length=50,
         verbose_name='Язык программирования',
