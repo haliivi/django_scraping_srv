@@ -2,7 +2,19 @@
 {% block title %}Home{% endblock title %}
 {% block content %}
     {% for obj in object_list %}
-    <p><a href="{{ obj.url }}">{{ obj }}</a></p>
-    <p>{{ obj.description }}</p>
+        <div class="card my-3">
+            <div class="card-header"><a href="{{ obj.url }}">{{ obj }}</a></div>
+            <div class="card-body">
+                <p class="card-text">{{ obj.description }}</p>
+                <p>{{ obj.city }} | {{ obj.language }} | <small>{{ obj.timestamp|date:"d-m-y" }}</small></p>
+            </div>
+        </div>
     {% endfor %}
+    <form method="get" action="">
+        <label for="city">Город:</label><br />
+        <input id="city" name="city" type="text"><br />
+        <label for="language">Специальность:</label><br />
+        <input id="language" name="language" type="text"><br />
+        <input type="submit" value="Submit">
+    </form>
 {% endblock content %}
