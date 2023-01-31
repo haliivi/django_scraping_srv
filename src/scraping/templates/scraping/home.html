@@ -5,6 +5,7 @@
         <div class="card my-3">
             <div class="card-header"><a href="{{ obj.url }}">{{ obj }}</a></div>
             <div class="card-body">
+                <h4>{{ obj.company }}</h4>
                 <p class="card-text">{{ obj.description }}</p>
                 <p>{{ obj.city }} | {{ obj.language }} | <small>{{ obj.timestamp|date:"d-m-y" }}</small></p>
             </div>
