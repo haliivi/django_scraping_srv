@@ -20,5 +20,4 @@ from .views import *
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('home/', include('scraping.urls')),
-    # path('home/', home),
 ]
