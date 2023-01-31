@@ -70,7 +70,7 @@ class Language(models.Model):
         super().save(*args, **kwargs)
 
 
-class Vacancy(models.Model):
+class Vacancy(BaseModel):
     url = models.URLField(unique=True)
     title = models.CharField(max_length=250, verbose_name='Заголовок вакансии')
     company = models.CharField(max_length=250, verbose_name='Компания')
