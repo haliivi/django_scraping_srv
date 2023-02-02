@@ -34,78 +34,80 @@ headers = [
 ]
 
 
-def work(url_):
+def work(url_, city=None, language=None):
     jobs_ = []
     errors_ = []
     domain = 'https://www.work.ua'
-    resp = requests.get(url=url_, headers=headers[randint(0, 5)])
-
-    status_code = resp.status_code
-
-    if status_code == 200:
-        soup = bs(resp.content, 'html.parser')
-        main_div = soup.find('div', id='pjax-job-list')
-        if main_div:
-            divs = main_div.find_all('div', attrs={'class': 'job-link'})
-            for div in divs:
-                title = div.find('h2')
-                href = title.a['href']
-                description = div.p.text
-                company = logo['alt'] if (logo := div.find('img')) else 'No company'
-                jobs_.append({
-                    'title': title.text,
-                    'url': domain + href,
-                    'description': description,
-                    'company': company,
+    if url_:
+        resp = requests.get(url=url_, headers=headers[randint(0, 5)])
+        status_code = resp.status_code
+        if status_code == 200:
+            soup = bs(resp.content, 'html.parser')
+            main_div = soup.find('div', id='pjax-job-list')
+            if main_div:
+                divs = main_div.find_all('div', attrs={'class': 'job-link'})
+                for div in divs:
+                    title = div.find('h2')
+                    href = title.a['href']
+                    description = div.p.text
+                    company = logo['alt'] if (logo := div.find('img')) else 'No company'
+                    jobs_.append({
+                        'title': title.text,
+                        'url': domain + href,
+                        'description': description,
+                        'company': company,
+                        'city_id': city,
+                        'language_id': language,
+                    })
+            else:
+                errors_.append({
+                    'url': url_,
+                    'title': 'Div does not exists.',
                 })
         else:
             errors_.append({
                 'url': url_,
-                'title': 'Div does not exists.',
+                'title': 'Page do not response',
             })
-    else:
-        errors_.append({
-            'url': url_,
-            'title': 'Page do not response',
-        })
     return jobs_, errors_
 
 
-def djinni(url_):
+def djinni(url_, city=None, language=None):
     jobs_ = []
     errors_ = []
     domain = 'https://djinni.co'
-    resp = requests.get(url=url_, headers=headers[randint(0, 5)])
-
-    status_code = resp.status_code
-
-    if status_code == 200:
-        soup = bs(resp.content, 'html.parser')
-        main_ul = soup.find('ul', attrs={'class': 'list-jobs'})
-        if main_ul:
-            lis = main_ul.find_all('li', attrs={'class': 'list-jobs__item'})
-            for li in lis:
-                title = li.find('div', attrs={'class': 'list-jobs__title'})
-                href = title.a['href']
-                content = li.find('div', attrs={'class': 'list-jobs__description'})
-                description = content.text
-                company = company.text if (company := li.find('div', attrs={'class': 'list-jobs__details__info'})) else 'No company'
-                jobs_.append({
-                    'title': title.text,
-                    'url': domain + href,
-                    'description': description,
-                    'company': company,
+    if url_:
+        resp = requests.get(url=url_, headers=headers[randint(0, 5)])
+        status_code = resp.status_code
+        if status_code == 200:
+            soup = bs(resp.content, 'html.parser')
+            main_ul = soup.find('ul', attrs={'class': 'list-jobs'})
+            if main_ul:
+                lis = main_ul.find_all('li', attrs={'class': 'list-jobs__item'})
+                for li in lis:
+                    title = li.find('div', attrs={'class': 'list-jobs__title'})
+                    href = title.a['href']
+                    content = li.find('div', attrs={'class': 'list-jobs__description'})
+                    description = content.text
+                    company = company.text if (company := li.find('div', attrs={'class': 'list-jobs__details__info'})) else 'No company'
+                    jobs_.append({
+                        'title': title.text,
+                        'url': domain + href,
+                        'description': description,
+                        'company': company,
+                        'city_id': city,
+                        'language_id': language,
+                    })
+            else:
+                errors_.append({
+                    'url': url_,
+                    'title': 'Div does not exists.',
                 })
         else:
             errors_.append({
                 'url': url_,
-                'title': 'Div does not exists.',
+                'title': 'Page do not response.',
             })
-    else:
-        errors_.append({
-            'url': url_,
-            'title': 'Page do not response.',
-        })
     return jobs_, errors_
 
 

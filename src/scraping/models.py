@@ -6,7 +6,15 @@ __all__ = [
     'Language',
     'Vacancy',
     'Error',
+    'Url',
 ]
+
+
+def default_urls():
+    return {
+        'work': '',
+        'djinni': '',
+    }
 
 
 class BaseModel(models.Model):
@@ -84,6 +92,7 @@ class Vacancy(BaseModel):
     class Meta:
         verbose_name = 'Вакансия'
         verbose_name_plural = 'Вакансии'
+        ordering = ['-timestamp']
 
     def __str__(self):
         return self.title
@@ -92,3 +101,12 @@ class Vacancy(BaseModel):
 class Error(BaseModel):
     timestamp = models.DateField(auto_now_add=True)
     data = jsonfield.JSONField()
+
+
+class Url(BaseModel):
+    city = models.ForeignKey('city', on_delete=models.CASCADE, verbose_name='Город')
+    language = models.ForeignKey('language', on_delete=models.CASCADE, verbose_name='Язык программирования')
+    url_data = jsonfield.JSONField(default=default_urls)
+
+    class Meta:
+        unique_together = ('city', 'language')
