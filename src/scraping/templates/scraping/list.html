@@ -17,6 +17,31 @@
             </div>
         </div>
     {% endfor %}
+    {% if object_list %}
+        <div class="row">
+            <div class="col">
+                <ul class="pagination">
+                    {% if object_list.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?city={{ city }}&language={{ language }}&page=1">
+                                <span aria-hidden="true">&laquo</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                    {% for page in object_list.paginator.page_range %}
+                        <li class="page-item {% if page == object_list.number %}active{% endif %}"><a class="page-link" href="?city={{ city }}&language={{ language }}&page={{ page }}">{{ page }}</a></li>
+                    {% endfor %}
+                    {% if object_list.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?city={{ city }}&language={{ language }}&page={{ object_list.next_page_number }}">
+                                <span aria-hidden="true">&raquo</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    {% endif %}
     <div class="row">
         <div class="col-md-4 mx-auto">
             <form method="get" action="{% url 'list' %}">
