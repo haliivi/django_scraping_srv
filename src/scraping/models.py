@@ -1,9 +1,11 @@
 from django.db import models
 from .utils import *
+import jsonfield
 __all__ = [
     'City',
     'Language',
     'Vacancy',
+    'Error',
 ]
 
 
@@ -85,3 +87,8 @@ class Vacancy(BaseModel):
 
     def __str__(self):
         return self.title
+
+
+class Error(BaseModel):
+    timestamp = models.DateField(auto_now_add=True)
+    data = jsonfield.JSONField()
