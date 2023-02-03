@@ -19,8 +19,8 @@
     {% endfor %}
     {% if object_list %}
         <div class="row">
-            <div class="col">
-                <ul class="pagination">
+            <div class="col-md-4 mx-auto">
+                <ul class="pagination" style="justify-content: center;">
                     {% if object_list.has_previous %}
                         <li class="page-item">
                             <a class="page-link" href="?city={{ city }}&language={{ language }}&page=1">
