@@ -1,11 +1,12 @@
 from django import forms
 from django.contrib.auth import get_user_model, authenticate
 from django.contrib.auth.hashers import check_password
+from scraping.models import *
 __all__ = [
     'UserLogniForm',
     'UserRegistrationForm',
+    'UserUpdateForm',
 ]
-
 
 User = get_user_model()
 
@@ -19,7 +20,6 @@ class UserLogniForm(forms.Form):
         password = self.cleaned_data.get('password')
         if email and password:
             user = User.objects.filter(email=email)
-            print(user)
             if not user.exists():
                 raise forms.ValidationError('Такого пользователя нет!')
             if not check_password(password, user.first().password):
@@ -46,3 +46,17 @@ class UserRegistrationForm(forms.ModelForm):
         if data['password'] != data['password_2']:
             raise forms.ValidationError('Пароли не совпадают!')
         return data['password_2']
+
+
+class UserUpdateForm(forms.Form):
+    city = forms.ModelChoiceField(queryset=City.objects.all(), to_field_name='slug', required=True, widget=forms.Select(attrs={'class': 'form-control'}), label='Город:')
+    language = forms.ModelChoiceField(queryset=Language.objects.all(), to_field_name='slug', required=True, widget=forms.Select(attrs={'class': 'form-control'}), label='Специальность')
+    send_email = forms.BooleanField(required=False, widget=forms.CheckboxInput(), label='Получать рассылку')
+
+    class Meta:
+        model = User
+        fields = (
+            'city',
+            'language'
+            'send_email'
+        )
