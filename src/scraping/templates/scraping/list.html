@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 {% block title %}Home{% endblock title %}
 {% block content %}
-    {% if object_list %}
+    {% if page_obj %}
         <h3 class="text-center" style="text-align: justify;">Результаты согласно вашего запроса</h3>
-        {% for obj in object_list %}
+        {% for obj in page_obj %}
             <div class="card my-3">
                 <div class="card-header"><a href="{{ obj.url }}">{{ obj }}</a></div>
                 <div class="card-body">
@@ -16,17 +16,17 @@
         <div class="row">
             <div class="col-md-4 mx-auto">
                 <ul class="pagination" style="justify-content: center;">
-                    {% if object_list.has_previous %}
+                    {% if page_obj.has_previous %}
                         <li class="page-item">
                             <a class="page-link" href="?city={{ city }}&language={{ language }}&page=1">
                                 <span aria-hidden="true">&laquo</span>
                             </a>
                         </li>
                     {% endif %}
-                    {% for page in object_list.paginator.page_range %}
+                    {% for page in page_obj.paginator.page_range %}
                         <li class="page-item {% if page == object_list.number %}active{% endif %}"><a class="page-link" href="?city={{ city }}&language={{ language }}&page={{ page }}">{{ page }}</a></li>
                     {% endfor %}
-                    {% if object_list.has_next %}
+                    {% if page_obj.has_next %}
                         <li class="page-item">
                             <a class="page-link" href="?city={{ city }}&language={{ language }}&page={{ object_list.next_page_number }}">
                                 <span aria-hidden="true">&raquo</span>
