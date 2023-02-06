@@ -82,7 +82,7 @@ def contact(request):
     if request.method == 'POST':
         contact_form = ContactForm(request.POST or None)
         if contact_form.is_valid():
-            data = contact_form.clined_data
+            data = contact_form.cleaned_data
             city = data.get('city')
             language = data.get('language')
             email = data.get('email')
@@ -97,7 +97,7 @@ def contact(request):
                 data = [{'city': city, 'language': language, 'email': email}]
                 Error(data=f'user_data:{data}').save()
             messages.success(request, 'Данные отправлены администрации.')
-            return redirect(request, 'accounts:update')
+            return redirect('accounts:update')
         else:
             return redirect('accounts:update')
     else:

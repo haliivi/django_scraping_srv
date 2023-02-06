@@ -1,23 +1,18 @@
 {% extends 'base.html' %}
 {% block title %}Home{% endblock title %}
 {% block content %}
-    {% for obj in object_list %}
-        <div class="card my-3">
-            <div class="card-header"><a href="{{ obj.url }}">{{ obj }}</a></div>
-            <div class="card-body">
-                <h4>{{ obj.company }}</h4>
-                <p class="card-text">{{ obj.description }}</p>
-                <p>{{ obj.city }} | {{ obj.language }} | <small>{{ obj.timestamp|date:"d-m-y" }}</small></p>
-            </div>
-        </div>
-    {% empty %}
-        <div class="row">
-            <div class="col-md-4 mx-auto">
-                <h3 class="mx-auto" style="text-align: justify;">К сожалению по вашему запросу ничего не найдено!!!</h3>
-            </div>
-        </div>
-    {% endfor %}
     {% if object_list %}
+        <h3 class="text-center" style="text-align: justify;">Результаты согласно вашего запроса</h3>
+        {% for obj in object_list %}
+            <div class="card my-3">
+                <div class="card-header"><a href="{{ obj.url }}">{{ obj }}</a></div>
+                <div class="card-body">
+                    <h4>{{ obj.company }}</h4>
+                    <p class="card-text">{{ obj.description }}</p>
+                    <p>{{ obj.city }} | {{ obj.language }} | <small>{{ obj.timestamp|date:"d-m-y" }}</small></p>
+                </div>
+            </div>
+        {% endfor %}
         <div class="row">
             <div class="col-md-4 mx-auto">
                 <ul class="pagination" style="justify-content: center;">
@@ -39,6 +34,12 @@
                         </li>
                     {% endif %}
                 </ul>
+            </div>
+        </div>
+    {% else %}
+        <div class="row">
+            <div class="col-md-4 mx-auto">
+                <h3 class="mx-auto" style="text-align: justify;">К сожалению по вашему запросу ничего не найдено!!!</h3>
             </div>
         </div>
     {% endif %}

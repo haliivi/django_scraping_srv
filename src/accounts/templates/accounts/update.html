@@ -23,4 +23,27 @@
             </form>
         </div>
     </div>
+    <div class="container">
+        <div class="col-md-12 text-center">
+            <h4 class="my-2" style="text-align:justify">Если вы не нашли подходящий набор Город, Специальность, вы можете заполнить форму ниже с вашими пожеланиями. После того, как необходимые данные будут добавлены, вы получите на указанный вами email сообщение.</h4>
+            <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseForm" aria-expanded="false" aria-controls="collapseExample">
+                Форма обратной связи
+            </button>
+        </div>
+    </div>
+    <div class="collapse" id="collapseForm">
+        <div class="row my-5">
+            <div class="col-md-4 mx-auto card card-body">
+                <form method="post" action="{% url 'accounts:contact' %}">
+                    {% csrf_token %}
+                    {{ contact_form.as_p }}
+                    <div class="container">
+                        <div class="col-md-12 text-center">
+                            <button type="submit" class="btn btn-primary">Отправить</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 {% endblock content %}

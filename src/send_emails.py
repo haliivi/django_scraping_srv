@@ -64,11 +64,21 @@ html_ = ''
 qs = Error.objects.filter(timestamp=today)
 if qs.exists():
     error = qs.first()
-    data = error.data
+    data = error.data.get('errors', [])
     for i in data:
         html_ += f'<p><a href="{i["url"]}">Error: {i["title"]}</a></p>'
-    subject = 'Ошибки скрапинга'
+    subject += 'Ошибки скрапинга'
     text_content = 'Ошибки скрапинга'
+
+    data = error.data.get('user_data')
+    if data:
+        html_ += '<hr />'
+        html_ += '<h2>Пожелания пользователей</h2>'
+    for i in data:
+        html_ += f'<p>Город: {i["city"]}, Специальность: {i["language"]}, E-mail: {i["email"]}</p>'
+    subject += 'Пожелания пользователей'
+    text_content = 'Пожелания пользователей'
+
 
 qs = Url.objects.all().values('city', 'language')
 urls_dict = {(i['city'], i['language']): True for i in qs}
