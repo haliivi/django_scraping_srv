@@ -1,7 +1,8 @@
 import asyncio
 import os
 import sys
-
+import time
+import datetime as dt
 from django.contrib.auth import get_user_model
 
 project = os.path.dirname(os.path.abspath('manage.py'))
@@ -36,12 +37,13 @@ def get_urls(settings_):
     url_dict = {(q['city_id'], q['language_id']): q['url_data'] for q in qs}
     urls = []
     for pair in settings_:
-        tmp = {
-            'city': pair[0],
-            'language': pair[1],
-            'url_data': url_dict[pair]
-        }
-        urls.append(tmp)
+        if pair in url_dict:
+            tmp = {
+                'city': pair[0],
+                'language': pair[1],
+                'url_data': url_dict[pair]
+            }
+            urls.append(tmp)
     return urls
 
 
@@ -58,7 +60,8 @@ url_list = get_urls(settings)
 # city = City.objects.filter(slug='kaluga').first()
 # language = Language.objects.filter(slug='php').first()
 
-import time
+
+
 
 
 start = time.time()
@@ -80,5 +83,11 @@ for job in jobs:
         Vacancy(**job).save()
     except DatabaseError as e:
         print(e)
-
-Error(data=errors).save() if errors else None
+if errors:
+    qs = Error.objects.filter(timestamp=dt.date.today())
+    if qs.exists():
+        err = qs.first()
+        err.data.update({'errors': errors})
+        err.save()
+    else:
+        Error(data=f'errors:{errors}').save()

@@ -6,6 +6,7 @@ __all__ = [
     'UserLogniForm',
     'UserRegistrationForm',
     'UserUpdateForm',
+    'ContactForm',
 ]
 
 User = get_user_model()
@@ -60,3 +61,9 @@ class UserUpdateForm(forms.Form):
             'language'
             'send_email'
         )
+
+
+class ContactForm(forms.Form):
+    city = forms.CharField(required=True, widget=forms.TextInput(attrs={'class': 'form-control'}), label='Город:')
+    language = forms.CharField(required=True, widget=forms.TextInput(attrs={'class': 'form-control'}), label='Специальность')
+    email = forms.CharField(widget=forms.EmailInput(attrs={'class': 'form-control'}), label='Введите email')

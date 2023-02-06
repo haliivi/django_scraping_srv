@@ -102,6 +102,9 @@ class Error(BaseModel):
     timestamp = models.DateField(auto_now_add=True)
     data = jsonfield.JSONField()
 
+    def __str__(self):
+        return str(self.timestamp)
+
 
 class Url(BaseModel):
     city = models.ForeignKey('city', on_delete=models.CASCADE, verbose_name='Город')

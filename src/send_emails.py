@@ -39,33 +39,49 @@ if users_dict:
         params['language_id__in'].append(language)
     vacancies = Vacancy.objects.filter(**params, timestamp=today).values()
     vacancies_dict = {}
-    for vacancy in vacancies:
-        vacancies_dict.setdefault((vacancy['city_id'], vacancy['language_id']), [])
-        vacancies_dict[(vacancy['city_id'], vacancy['language_id'])].append(vacancy)
-    for keys, emails in users_dict.items():
-        rows = vacancies_dict.get(keys, [])
-        html = ''
-        for row in rows:
-            html += f'<div><a href="{row["url"]}">{row["title"]}</a></div>'
-            html += f'<p>{row["description"]}</p>'
-            html += f'<p>{row["company"]}</p><br /><hr>'
-        html_ = html if html else empty
-        for email in emails:
-            to = email
-            msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
-            msg.attach_alternative(html_, "text/html")
-            msg.send()
+    # for vacancy in vacancies:
+    #     vacancies_dict.setdefault((vacancy['city_id'], vacancy['language_id']), [])
+    #     vacancies_dict[(vacancy['city_id'], vacancy['language_id'])].append(vacancy)
+    # for keys, emails in users_dict.items():
+    #     rows = vacancies_dict.get(keys, [])
+    #     html = ''
+    #     for row in rows:
+    #         html += f'<div><a href="{row["url"]}">{row["title"]}</a></div>'
+    #         html += f'<p>{row["description"]}</p>'
+    #         html += f'<p>{row["company"]}</p><br /><hr>'
+    #     html_ = html if html else empty
+    #     for email in emails:
+    #         to = email
+    #         msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+    #         msg.attach_alternative(html_, "text/html")
+    #         msg.send()
 
-qs = Error.objects.fileter(timestamp=today)
+subject = ''
+text_content = ''
+to = EMAIL_ADMIN_USER
+html_ = ''
+
+qs = Error.objects.filter(timestamp=today)
 if qs.exists():
     error = qs.first()
     data = error.data
-    content = ''
     for i in data:
         html_ += f'<p><a href="{i["url"]}">Error: {i["title"]}</a></p>'
     subject = 'Ошибки скрапинга'
     text_content = 'Ошибки скрапинга'
-    to = EMAIL_ADMIN_USER
+
+qs = Url.objects.all().values('city', 'language')
+urls_dict = {(i['city'], i['language']): True for i in qs}
+urls_err = ''
+for keys in users_dict.keys():
+    if keys not in urls_dict:
+        urls_err = f'<p>Для города: {keys[0]} и ЯП: {keys[1]} отсутствует url.</p>'
+
+if urls_err:
+    subject += 'Ошибки скрапинга'
+    html_ += urls_err
+
+if subject:
     msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
     msg.attach_alternative(html_, "text/html")
     msg.send()
