@@ -1,0 +1,1 @@
+Service for scraping and sending to user vacancies.
